@@ -11,83 +11,71 @@ const BoardComponent = () => {
     /**
      * =====================================================ALGORITHM BEGIN=====================================
      * Algorithm for checking balanced strings
-     * Time O(N), space O(N)
+     * let be; N = Number of emoticons
+     * Time O(N^2), space O(N^2)
      */
 
     const isMessageBalanced = (message) => {
         message = message.split('');
         let sizeStr = message.length;
         let currentPosFrom = 0;
-        let maxRightCntSoFar = 0;
         let lastEmoticonSeenSoFar = '$';
-        let happyEmoticonsCnt = 0;
-        let sadEmoticonsCnt = 0;
+        let pairs = [];
         do {
             let nextEmoticonPos = findNextIndexEmoticon(message, currentPosFrom);
             if (nextEmoticonPos !== -1) {
-                let [leftCnt, rightCnt] = reduceParenthesis(message, currentPosFrom, nextEmoticonPos);
-                if (lastEmoticonSeenSoFar !== '$') {
-                    if (lastEmoticonSeenSoFar === '(') {
-                        if (maxRightCntSoFar + 1 < leftCnt) {
-                            return false;
-                        } else if (maxRightCntSoFar + 1 === leftCnt) {
-                            happyEmoticonsCnt = 0;
-                            sadEmoticonsCnt = 0;
-                            maxRightCntSoFar = rightCnt;
-                        } else {
-                            maxRightCntSoFar -= leftCnt;
-                            maxRightCntSoFar += rightCnt + 1;
-                        }
-                    } else {
-                        if (maxRightCntSoFar < leftCnt) {
-                            return false;
-                        } else if (maxRightCntSoFar === leftCnt) {
-                            happyEmoticonsCnt = 0;
-                            sadEmoticonsCnt = 0;
-                            maxRightCntSoFar = rightCnt;
-                        } else {
-                            maxRightCntSoFar -= leftCnt;
-                            maxRightCntSoFar += rightCnt;
-                        }
-                    }
-                } else {
-                    if (maxRightCntSoFar < leftCnt) {
-                        return false;
-                    }
-                    maxRightCntSoFar += rightCnt;
-                }
+                pairs.push(reduceParenthesis(message, currentPosFrom, nextEmoticonPos));
                 lastEmoticonSeenSoFar = message[nextEmoticonPos + 1];
-                if (lastEmoticonSeenSoFar === ')') {
-                    happyEmoticonsCnt++;
-                } else sadEmoticonsCnt++;
+                pairs.push(lastEmoticonSeenSoFar);
                 currentPosFrom = nextEmoticonPos + 2;
             } else {
-                let [leftCnt, rightCnt] = reduceParenthesis(message, currentPosFrom, sizeStr - 1);
-                if (0 < rightCnt) return false;
-                if (lastEmoticonSeenSoFar !== '$') {
-                    if (lastEmoticonSeenSoFar === '(') {
-                        if (maxRightCntSoFar + 1 < leftCnt) {
-                            return false;
-                        } else if (maxRightCntSoFar + 1 === leftCnt) {
-                            return true;
-                        } else {
-                            maxRightCntSoFar -= leftCnt;
-                            maxRightCntSoFar += 1;
-                        }
-                    } else {
-                        if (maxRightCntSoFar < leftCnt) {
-                            return false;
-                        } else if (maxRightCntSoFar === leftCnt) {
-                            return true;
-                        } else {
-                            maxRightCntSoFar -= leftCnt;
-                        }
-                    }
-                    return maxRightCntSoFar <= sadEmoticonsCnt;
-                }
-                return leftCnt === 0 && rightCnt === 0;
+                pairs.push(reduceParenthesis(message, currentPosFrom, sizeStr - 1));
+                break;
             }
         } while (true);
+
+        let sizePairs = pairs.length;
+
+        if (1 < sizePairs) { //message has at leat 1 emoticon
+            if (pairs[0][0] === 0) {
+                let memo = Array(sizePairs);
+                for (let i = 0; i < sizePairs; i++) {
+                    memo[i] = new Map();
+                }
+                return dp(memo, pairs, 1, pairs[0][1]);
+            }
+            return false;
+        } else { //message has no emoticons at all
+            return pairs[0][0] === 0 && pairs[0][1] === 0;
+        }
+    }
+
+    //Change to Dynamic Programming Approach
+    const dp = (memo, pairs, pos, maxCounter) => {
+        if (pos >= pairs.length) {
+            return maxCounter === 0;
+        }
+        if (memo[pos].has(maxCounter)) return memo[pos].get(maxCounter);
+        let ans = false;
+        if (pairs[pos] === '(') {
+            if (maxCounter + 1 < pairs[pos + 1][0]) {
+                ans = false;
+            } else if (maxCounter + 1 === pairs[pos + 1][0]) {
+                ans |= dp(memo, pairs, pos + 2, pairs[pos + 1][1]);
+            } else {
+                ans |= dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] + pairs[pos + 1][1]) | dp(memo, pairs, pos + 2, maxCounter + 1 - pairs[pos + 1][0] + pairs[pos + 1][1]);
+            }
+        } else {
+            if (maxCounter < pairs[pos + 1][0]) {
+                ans = false;
+            } else if (maxCounter === pairs[pos + 1][0]) {
+                ans |= dp(memo, pairs, pos + 2, pairs[pos + 1][1]);
+            } else {
+                ans |= dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] - 1 + pairs[pos + 1][1]) | dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] + pairs[pos + 1][1]);
+            }
+        }
+        memo[pos].set(maxCounter, ans);
+        return ans;
     }
 
     const findNextIndexEmoticon = (message, fromIdx) => {

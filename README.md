@@ -20,5 +20,6 @@ You will also see any lint errors in the console.
 ## Algorithm
 
 The algorithm is found at [src/components/Board](https://github.com/FidFenix/quick-test/blob/main/src/components/Board.jsx#L12).<br>
-**Complexity: O(N)**<br>
-**Space: O(N)**<br>
+Let be; **N** = Number of emoticons<br>
+**Complexity: O(N^2)**<br>
+**Space: O(N^2)**<br>

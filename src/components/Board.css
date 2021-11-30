@@ -1,0 +1,24 @@
+.Main {
+    width: 60%;
+}
+
+.Main .box .buttons {
+    flex-direction: row-reverse;
+}
+
+.Main .box .buttons .button{
+    margin: 5px;
+}
+
+.Main .box .field p {
+    color: blue;
+}
+
+.ResultCheck{
+    width: 100%;
+}
+
+.ResultCheck h2{
+    color:white;
+}
+

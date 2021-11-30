@@ -19,10 +19,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-top: 5%;
   color: white;
 }
+.Title {
+  background-color: #282c34;
+  padding-bottom: 10px;
+}
+
+.Title h1{
+    color: white;
+};
 
 .App-link {
   color: #61dafb;

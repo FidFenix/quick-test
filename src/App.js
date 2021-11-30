@@ -1,23 +1,18 @@
-import logo from './logo.svg';
+import BoardComponent from './components/Board';
+
 import './App.css';
+import 'bulma/css/bulma.min.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="App-header">
+        <div className='Title'>
+          <h1 class="title is-2">Balance () :( Checker :) ()  <em>(Fidel Mamani)</em> </h1>
+          <p>This program checks wheter a message is balanced or not.</p>
+        </div>
+        <BoardComponent />
+      </div>
     </div>
   );
 }

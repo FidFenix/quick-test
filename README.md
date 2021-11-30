@@ -19,6 +19,6 @@ You will also see any lint errors in the console.
 
 ## Algorithm
 
-The algorithm is found at [src/components/Board](https://github.com/FidFenix/quick-test/blob/main/src/components/Board.jsx#L12).\s\s
-**Complexity: O(N)**\s\s
-**Space: O(N)**\s\s
+The algorithm is found at [src/components/Board](https://github.com/FidFenix/quick-test/blob/main/src/components/Board.jsx#L12).<br>
+**Complexity: O(N)**<br>
+**Space: O(N)**<br>

@@ -42,7 +42,7 @@ const BoardComponent = () => {
                 for (let i = 0; i < sizePairs; i++) {
                     memo[i] = new Map();
                 }
-                return dp(memo, pairs, 1, pairs[0][1]);
+                return dp(memo, pairs, 1, pairs[0][1]);;
             }
             return false;
         } else { //message has no emoticons at all
@@ -61,17 +61,17 @@ const BoardComponent = () => {
             if (maxCounter + 1 < pairs[pos + 1][0]) {
                 ans = false;
             } else if (maxCounter + 1 === pairs[pos + 1][0]) {
-                ans |= dp(memo, pairs, pos + 2, pairs[pos + 1][1]);
+                ans = dp(memo, pairs, pos + 2, pairs[pos + 1][1]);
             } else {
-                ans |= dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] + pairs[pos + 1][1]) | dp(memo, pairs, pos + 2, maxCounter + 1 - pairs[pos + 1][0] + pairs[pos + 1][1]);
+                ans = dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] + pairs[pos + 1][1]) || dp(memo, pairs, pos + 2, maxCounter + 1 - pairs[pos + 1][0] + pairs[pos + 1][1]);
             }
         } else {
             if (maxCounter < pairs[pos + 1][0]) {
                 ans = false;
             } else if (maxCounter === pairs[pos + 1][0]) {
-                ans |= dp(memo, pairs, pos + 2, pairs[pos + 1][1]);
+                ans = dp(memo, pairs, pos + 2, pairs[pos + 1][1]);
             } else {
-                ans |= dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] - 1 + pairs[pos + 1][1]) | dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] + pairs[pos + 1][1]);
+                ans = dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] - 1 + pairs[pos + 1][1]) || dp(memo, pairs, pos + 2, maxCounter - pairs[pos + 1][0] + pairs[pos + 1][1]);
             }
         }
         memo[pos].set(maxCounter, ans);
